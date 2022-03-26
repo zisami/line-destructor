@@ -8,25 +8,23 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
         lineRest: lineInput,
     };
     if (actions) {
-        lineData = actions.reduce(runAction(), lineData);
+        lineData = actions.reduce(runModifier(), lineData);
     }
     return lineData;
 
-    function runAction() {
+    function runModifier() {
         return (lineData, action) => {
             const patternMatch = lineData.lineRest.match(action.pattern);
+            if (!patternMatch) return lineData;
+
             let lineDataNew = { ...lineData };
-            if (patternMatch) {
-                const valueFormModifyer = { [action.paramName]: action.modify({ patternMatch }) };
-                if (!lineData[action.paramName]) {
-                    lineDataNew = { ...lineDataNew, ...valueFormModifyer };
-                }
-                lineDataNew.lineRest = lineDataNew.lineRest.replace(action.pattern,'').trim();
+            const valueFormModifyer = { [action.propertyName]: action.modify({ patternMatch }) };
+            if (!lineData[action.propertyName]) {
+                lineDataNew = { ...lineDataNew, ...valueFormModifyer };
             }
+            lineDataNew.lineRest = lineDataNew.lineRest.replace(action.pattern, '').trim();
 
             return lineDataNew;
         };
     }
 };
-
-
