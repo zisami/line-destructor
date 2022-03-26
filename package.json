@@ -1,0 +1,15 @@
+{
+  "name": "line-destructor",
+  "version": "1.0.0",
+  "description": "destructs  line into a objetct",
+  "main": "line-destructor.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^27.5.1",
+    "moment": "^2.29.1"
+  }
+}
