@@ -5,6 +5,7 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
     }
     let lineData = {
         lineOrig: lineInput,
+        lineRest: lineInput,
     };
     if (actions) {
         lineData = actions.reduce(runAction(), lineData);
@@ -13,14 +14,16 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
 
     function runAction() {
         return (lineData, action) => {
+            const patternMatch = lineData.lineRest.match(action.pattern);
             let lineDataNew = { ...lineData };
-            const patternMatch = lineData.lineOrig.match(action.pattern);
             if (patternMatch) {
                 const valueFormModifyer = { [action.paramName]: action.modify({ patternMatch }) };
                 if (!lineData[action.paramName]) {
                     lineDataNew = { ...lineDataNew, ...valueFormModifyer };
                 }
+                lineDataNew.lineRest = lineDataNew.lineRest.replace(action.pattern,'').trim();
             }
+
             return lineDataNew;
         };
     }

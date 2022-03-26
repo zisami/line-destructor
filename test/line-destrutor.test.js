@@ -21,9 +21,19 @@ describe('run default destructuring', () => {
             expect(lineDestructor({ lineInput: mockLine.line })).toEqual(expect.objectContaining({ lineOrig: mockLine.line }));
         });
 
-        test('RETURNS lineOrigg GIVEN line as Object', () => {
+        test('RETURNS lineOrig GIVEN line as Object', () => {
             const input = { abc: 123 };
             expect(lineDestructor({ lineInput: input })).toEqual(expect.objectContaining({ lineOrig: JSON.stringify(input) }));
+        });
+    });
+    describe('Rest of Line that is left over after removeing pattern match ', () => {
+        test('RETURNS lineRest propperty GIVEN line but no actions', () => {
+            expect(lineDestructor({ lineInput: mockLine.line })).toEqual(expect.objectContaining({ lineRest: mockLine.line }));
+        });
+
+        test('RETURNS lineRest = line without date GIVEN line and action', () => {
+            const rest = 'this is the rest of the Line';
+            expect(lineDestructor({lineInput: `[2022-03-29 20:59:43:300] ${rest}`, actions: lineReducers.date })).toEqual(expect.objectContaining({ lineRest: rest }));
         });
     });
 });
