@@ -4,7 +4,7 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
         lineInput = JSON.stringify(lineInput);
     }
     let lineData = {
-        original: lineInput,
+        lineOrig: lineInput,
     };
     if (actions) {
         lineData = actions.reduce(runAction(), lineData);
@@ -14,7 +14,7 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
     function runAction() {
         return (lineData, action) => {
             let lineDataNew = { ...lineData };
-            const patternMatch = lineData.original.match(action.pattern);
+            const patternMatch = lineData.lineOrig.match(action.pattern);
             if (patternMatch) {
                 const valueFormModifyer = { [action.paramName]: action.modify({ patternMatch }) };
                 if (!lineData[action.paramName]) {
@@ -25,3 +25,5 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
         };
     }
 };
+
+
