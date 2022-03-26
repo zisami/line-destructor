@@ -4,7 +4,7 @@ const moment = require('moment');
 exports.lineReducers = {
     date: [
         {
-        paramName: 'date',
+        propertyName: 'date',
         pattern: /\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}:\d{3}\]/gm,
         modify: ({ patternMatch } = {}) => {
             if (!patternMatch) return null;
@@ -17,7 +17,7 @@ exports.lineReducers = {
         }
     },
     {
-        paramName: 'date',
+        propertyName: 'date',
         pattern: /\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/gm,
         modify: ({ patternMatch } = {}) => {
             if (!patternMatch) return null;
@@ -31,7 +31,7 @@ exports.lineReducers = {
     }],
     logLevel: [
         {
-        paramName: 'logLevel',
+        propertyName: 'logLevel',
         pattern: /(TRACE|DEBUG|INFO|NOTICE|WARN|WARNING|ERROR|SEVERE|FATAL)/gm,
         modify: ({ patternMatch } = {}) => {
             if (!patternMatch?.[0] ) return null;
