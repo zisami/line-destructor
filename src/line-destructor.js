@@ -7,19 +7,21 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
         original: lineInput,
     };
     if (actions) {
-        actions.map(runAction(lineInput)).forEach((actionvalue) => {
-            if (!lineData[Object.keys(actionvalue)[0]]) {
-                lineData = {...lineData, ...actionvalue}
-            }
-        });
-    } 
-    return lineData; //?
+        lineData = actions.reduce(runAction(), lineData);
+    }
+    return lineData;
 
-    function runAction(lineInput) {
-        return (action) => {
-            const valueFromAction = {};
-            valueFromAction[action.paramName] = action.modify({ patternMatch: lineInput.trim().match(action.pattern) });
-            return valueFromAction;
+    function runAction() {
+        return (lineData, action) => {
+            let lineDataNew = { ...lineData };
+            const patternMatch = lineData.original.match(action.pattern);
+            if (patternMatch) {
+                const valueFormModifyer = { [action.paramName]: action.modify({ patternMatch }) };
+                if (!lineData[action.paramName]) {
+                    lineDataNew = { ...lineDataNew, ...valueFormModifyer };
+                }
+            }
+            return lineDataNew;
         };
     }
 };
