@@ -47,7 +47,7 @@ exports.lineReducers = {
                         }
                     }
                 }
-                return dateTime || null;
+                return dateTime;
             },
         },
     ],
