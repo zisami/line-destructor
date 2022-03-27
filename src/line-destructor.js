@@ -13,16 +13,15 @@ exports.lineDestructor = function ({ lineInput, actions } = {}) {
     return lineData;
 
     function runModifier() {
-        return (lineData, action) => {
-            const patternMatch = lineData.lineRest.match(action.pattern);
+        return (lineData, reducer) => {
+            const patternMatch = lineData.lineRest.match(reducer.pattern);
             if (!patternMatch) return lineData;
-
             let lineDataNew = { ...lineData };
-            const valueFormModifyer = { [action.propertyName]: action.modify({ patternMatch }) };
-            if (!lineData[action.propertyName]) {
+            const valueFormModifyer = { [reducer.propertyName]: reducer.modify?.({patternMatch, lineDataNew,...reducer }) };
+            if (!lineData[reducer.propertyName]) {
                 lineDataNew = { ...lineDataNew, ...valueFormModifyer };
             }
-            lineDataNew.lineRest = lineDataNew.lineRest.replace(action.pattern, '').trim();
+            lineDataNew.lineRest = lineDataNew.lineRest.replace(reducer.pattern, '').trim();
 
             return lineDataNew;
         };
